@@ -1,0 +1,7 @@
+.ui-list-view .ui-list-view-cell {
+  padding: 10px;
+  background: #fff;
+  border-left: 4px solid #E41F00;
+  margin-bottom: 4px;
+  box-shadow: 0px 2px 3px 0 rgba(201, 201, 201, 0.85);
+}

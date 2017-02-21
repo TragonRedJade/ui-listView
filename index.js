@@ -1,3 +1,3 @@
-require('./src/ui-listView.js');
-require('./src/ui-listView.css');
+require('./dist/ui-listView.js');
+require('./dist/ui-listView.css');
 module.exports = 'ui-listView';

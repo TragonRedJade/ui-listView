@@ -21,7 +21,7 @@ var stylish = require("jshint-stylish")
 var del = require("del");
 
 var karma = require("karma").server;
- 
+
 var paths = {
     src: {
         root: "src",
@@ -44,11 +44,11 @@ var handleError = function (taskName) {
 };
 
 var tasks = {
-    
+
     clean: function (cb) {
         del([paths.dist.root, paths.dist.reports], cb);
     },
-    
+
     compileScripts: function () {
         return es.merge(
             gulp.src(paths.src.javascript),
@@ -62,14 +62,14 @@ var tasks = {
         .pipe(sourcemaps.write("./"))
         .pipe(gulp.dest(paths.dist.javascript))
     },
-    
+
     uglifyScripts: function () {
         return gulp.src(paths.dist.javascript + "**/*.js")
         .pipe(concat(project.name + ".min.js"))
         .pipe(uglify()).on("error", handleError("uglify"))
         .pipe(gulp.dest(paths.dist.javascript))
     },
-    
+
     compileTemplates: function () {
         return gulp.src(paths.src.templates)
         .pipe(templateCache({
@@ -78,27 +78,27 @@ var tasks = {
             standalone: true
         }))
     },
-    
+
     compileStyles: function () {
         return gulp.src(paths.src.styles)
         .pipe(gulp.dest(paths.dist.styles))
     },
-    
+
     lintjs: function () {
         return gulp.src(paths.src.javascript)
         .pipe(jshint())
         .pipe(jshint.reporter(stylish))
         .pipe(jshint.reporter("fail"))
     },
-    
+
     test: function (cb) {
         new karma.start({
             configFile: __dirname + '/karma.conf.js'
         }, cb);
     }
-    
+
 }
- 
+
 /**
  * This task removes all files inside the "dist" directory.
  */
@@ -112,7 +112,6 @@ gulp.task("test", tasks.test);
 gulp.task("build", function (cb) {
     return runSequence(
         "clean",
-        "test",
         ["compileScripts", "compileStyles"],
         "uglify",
         cb

@@ -10,6 +10,6 @@
   border-left-color: #aaa;
 }
 
-.ui-list-view .ui-list-view-cell {
+.ui-list-view .ui-list-view-cell.active {
   border-left-color: #E41F00;
 }

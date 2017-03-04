@@ -1,7 +1,15 @@
 .ui-list-view .ui-list-view-cell {
-  padding: 10px;
+  padding: 10px 15px;
   background: #fff;
-  border-left: 4px solid #E41F00;
+  border-left: 4px solid transparent;
   margin-bottom: 4px;
   box-shadow: 0px 2px 3px 0 rgba(201, 201, 201, 0.85);
+}
+
+.ui-list-view .ui-list-view-cell:hover {
+  border-left-color: #aaa;
+}
+
+.ui-list-view .ui-list-view-cell {
+  border-left-color: #E41F00;
 }

@@ -443,7 +443,7 @@ _module.directive("uiListView", ["$rootScope", "$parse", function ($rootScope, $
         transclude: true,
         scope: {
             options: "=",
-            search: "="
+            onSearch: "="
         },
         controller: "UIListView",
         controllerAs: "listView",
@@ -460,6 +460,16 @@ _module.directive("uiListView", ["$rootScope", "$parse", function ($rootScope, $
             return function ($scope, element, attrs, listView) {
                 var rawElement = element[0];
 
+                // remove search from dom if not being used
+                if (attrs.onSearch === undefined) {
+                    element.find('.ui-list-view-search').remove();
+                }
+
+                // set the placeholder search value if provided
+                if (attrs.placeholder) {
+                    listView.placeholder = attrs.placeholder;
+                }
+
                 listView.delegate = {
 
                     getItemIdentifier: function getItemIdentifier() {
@@ -472,6 +482,13 @@ _module.directive("uiListView", ["$rootScope", "$parse", function ($rootScope, $
                     }
 
                 };
+
+                // call the search callback when text is entered
+                $scope.$watch("listView.search", function (search) {
+                    if ($scope.onSearch !== undefined) {
+                        $scope.onSearch(search);
+                    }
+                });
 
                 /**
                  * Update the viewport.
@@ -535,7 +552,7 @@ _module.directive("uiListView", ["$rootScope", "$parse", function ($rootScope, $
 "use strict";
 
 angular.module("ui-listView.templates", []).run(["$templateCache", function ($templateCache) {
-  $templateCache.put("ui-listView.tpl.html", "<div class=\"ui-list-view\">\n  <div class=\"ui-list-view-search\">\n    <span class=\"ui-list-view-search-label\">{{listView.placeholder}}</span>\n    <div class=\"ui-list-view-search-container\">\n      <input type=\"text\" placeholder=\"{{listView.placeholder}}\" ng-model=\"listView.search\">\n    </div>\n  </div>\n  <div class=\"ui-list-view-cell\" ui-list-view-cell ng-repeat=\"cell in listView.cells\">\n    <div class=\"ui-list-view-cell-content\"></div>\n  </div>\n  <div class=\"ui-list-view-anchor\" ui-list-view-anchor></div>\n</div>\n");
+  $templateCache.put("ui-listView.tpl.html", "<div class=\"ui-list-view\">\n  <div class=\"ui-list-view-search\">\n    <span class=\"ui-list-view-search-label\">{{listView.placeholder}}</span>\n    <div class=\"ui-list-view-search-container\">\n      <input class=\"form-control\" type=\"text\" placeholder=\"{{listView.placeholder}}\" ng-model=\"listView.search\">\n    </div>\n  </div>\n  <div class=\"ui-list-view-cell\" ui-list-view-cell ng-repeat=\"cell in listView.cells\">\n    <div class=\"ui-list-view-cell-content\"></div>\n  </div>\n  <div class=\"ui-list-view-anchor\" ui-list-view-anchor></div>\n</div>\n");
 }]);
 /**
  * @ngdoc directive

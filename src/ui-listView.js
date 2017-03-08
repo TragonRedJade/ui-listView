@@ -396,7 +396,7 @@ module.directive("uiListView", ($rootScope, $parse) => {
         transclude: true,
         scope: {
           options: "=",
-          search: "="
+          onSearch: "="
         },
         controller: "UIListView",
         controllerAs: "listView",
@@ -413,6 +413,17 @@ module.directive("uiListView", ($rootScope, $parse) => {
             return function ($scope, element, attrs, listView) {
                 var rawElement = element[0];
 
+                // remove search from dom if not being used
+                if(attrs.onSearch === undefined){
+                  element.find('.ui-list-view-search').remove();
+                }
+
+                // set the placeholder search value if provided
+                if(attrs.placeholder){
+                  listView.placeholder = attrs.placeholder;
+                }
+
+
                 listView.delegate = {
 
                     getItemIdentifier () {
@@ -425,6 +436,13 @@ module.directive("uiListView", ($rootScope, $parse) => {
                     }
 
                 };
+
+                // call the search callback when text is entered
+                $scope.$watch("listView.search", function (search) {
+                    if($scope.onSearch !== undefined){
+                      $scope.onSearch(search);
+                    }
+                });
 
                 /**
                  * Update the viewport.

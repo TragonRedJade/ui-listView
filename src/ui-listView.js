@@ -31,12 +31,13 @@ function safeDigest ($scope) {
  * @class
  */
 class UIListView {
-    
+
     constructor () {
         this.cells = [];
+        this.search = null;
         this.setOptions({});
     }
-    
+
     /**
      * Set new options for the list view.
      * @param {ui-listView.UIListView.Options} options
@@ -48,7 +49,7 @@ class UIListView {
         this.options = options;
         this.reload([]);
     }
-    
+
     /**
       * Reload the list view from scratch.  The rows will be
       * computed.
@@ -67,7 +68,7 @@ class UIListView {
         }
         this._rebuildRows(items);
     }
-    
+
     /**
       * Request that the row offsets be recomputed. It will perform the update
       * after the current digest.  This is useful if the offsets might be updated
@@ -88,7 +89,7 @@ class UIListView {
         }
         request.startIndex = Math.min(request.startIndex, startIndex);
     }
-    
+
     /**
       * Recompute the row offsets.
       * @param {Number} [startIndex] The index to start recomputing from.
@@ -100,7 +101,7 @@ class UIListView {
         var row;
         var currentOffset = rows[startIndex].offset;
         var i;
-        
+
         for (i = startIndex; i < rows.length; i++) {
             row = rows[i];
             row.offset = currentOffset;
@@ -111,7 +112,7 @@ class UIListView {
         }
         this.layout();
     }
-    
+
     /**
       * Updates the cells when the visible range changes.
       * @method
@@ -123,12 +124,12 @@ class UIListView {
         var rows = this.rows;
         var cells = this.cells;
         var cell, row, previousRow;
-        
+
         // Always start with an odd value for CSS.
         if (offset > 1 && (offset % 2)) {
             offset--;
         }
-        
+
         cells.length = range.length;
         for(var i = offset; i < lastIndex; i++) {
             cell = cells[i - offset];
@@ -151,7 +152,7 @@ class UIListView {
             previousRow = row;
         }
     }
-    
+
     /**
       * Updates the anchor position when the viewport is changes.
       * @method
@@ -165,7 +166,7 @@ class UIListView {
         }
         return scrollHeight !== lastScrollHeight;
     }
-    
+
     /**
       * Updates the visible range when the viewport changes.
       * @return {Boolean} True if the range is changed.
@@ -175,17 +176,17 @@ class UIListView {
         var viewport = this.viewport;
         var topOffset = viewport.offset;
         var bottomOffset = topOffset + viewport.height;
-        
+
         var rows = this.rows;
         var row;
-        
+
         var mid = this._findVisibleRowIndex(topOffset, bottomOffset);
         var foundFirst, foundLast;
         var firstIndex = 0, lastIndex = 0;
         var offset = 0;
-        
+
         var range = this.visibleRange;
-        
+
         while(!foundFirst || !foundLast) {
             if (!foundFirst) {
                 row = rows[mid - offset];
@@ -203,7 +204,7 @@ class UIListView {
             }
             offset++;
         }
-        
+
         this.options.range = this.visibleRange = {
             index: firstIndex,
             length: lastIndex - firstIndex,
@@ -211,7 +212,7 @@ class UIListView {
         };
         return range.index !== this.visibleRange.index || range.length !== this.visibleRange.length;
     }
-    
+
     /**
       * Set a new viewport.  This will relayout the list to that viewport.  This should not be called
       * manually.
@@ -225,7 +226,7 @@ class UIListView {
         };
         return this.layout();
     }
-    
+
     /**
       * Relayout the list view.  This is normally called when the viewport is updated.
       * @return {Boolean} True if the range is changed.
@@ -239,7 +240,7 @@ class UIListView {
         }
         return false;
     }
-    
+
     /**
       * The total scroll height of the list view.
       * @return {Number}
@@ -250,7 +251,7 @@ class UIListView {
         var lastRow = this.rows[len - 1];
         return len ? lastRow.offset + lastRow.height : 0;
     }
-    
+
     /**
       * Retrieve the styles for a cell.  This is used to set values like the cell's
       * current "top" position.
@@ -262,7 +263,7 @@ class UIListView {
             top: cell.row.offset + "px"
         };
     }
-    
+
     /**
      * Apply the default options when new ones are set.
      * @param {ui-listView.UIListView.Options} options
@@ -275,7 +276,7 @@ class UIListView {
             }
         }
     }
-    
+
     /**
       * Clears out and resets the list view's data.
       * @param {Boolean} [removeRows] Also remove the row meta data objects;
@@ -293,7 +294,7 @@ class UIListView {
             length: 0
         };
     }
-    
+
     /**
       * Rebuilds all the rows with the given items.
       * @param {Object[]} items
@@ -304,7 +305,7 @@ class UIListView {
         var offset = 0;
         var rows = this.rows;
         var row;
-        
+
         for (var i = 0; i < items.length; i++) {
             row = rows[i];
             if (!row) {
@@ -312,14 +313,14 @@ class UIListView {
                     height: this.options.preferredHeight,
                     offset: offset
                 };
-            } 
+            }
             row.index = i;
             row.item = items[i];
             row.cell = null;
             offset += row.height;
         }
     }
-    
+
     /**
       * Tries to efficiently find a visible row within the given offset range.  It returns the
       * index of the first row found.
@@ -334,11 +335,11 @@ class UIListView {
         var row;
         var mid = Math.floor(range.index + (range.length / 2));
         var start = 0, end = rows.length;
-        
+
         if (mid > rows.length - 1) {
             mid = Math.max(rows.length - 1, 0);
         }
-        
+
         while (end >= start && rows[mid]) {
             row = rows[mid];
             if (row.offset + row.height < topOffset) {
@@ -350,17 +351,17 @@ class UIListView {
             }
             mid = start + Math.round((end - start) / 2);
         }
-        
+
         return mid;
     }
-    
+
     _callDelegate (methodName, arg1, arg2, arg3) {
         var delegate = this.delegate;
         if (delegate) {
             return delegate[methodName](arg1, arg2, arg3);
         }
     }
-    
+
     /**
       * Call a method on the cell's delegate.
       * @param {sl.ui-listView.Cell} cell
@@ -377,12 +378,12 @@ class UIListView {
             return delegate[methodName](arg1, arg2, arg3);
         }
     }
-    
+
 }
 
 module.controller("UIListView", UIListView);
 module.directive("uiListView", ($rootScope, $parse) => {
-    
+
     /**
      * @ngdoc directive
      * @name ui-listView
@@ -393,47 +394,49 @@ module.directive("uiListView", ($rootScope, $parse) => {
         templateUrl: "ui-listView.tpl.html",
         replace: true, // TODO: remove
         transclude: true,
-        scope: { options: "=" },
-        
+        scope: {
+          options: "=",
+          search: "="
+        },
         controller: "UIListView",
         controllerAs: "listView",
-        
+
         require: "uiListView",
         compile (element, attrs) {
             var match = arrayRegexp.exec(attrs.uiListView);
             if (!match) {
-                throw Error("Invalid expression.  It must be in the form \"item in Array\" "); 
+                throw Error("Invalid expression.  It must be in the form \"item in Array\" ");
             }
             var itemIdentifier = match[1];
             var arrayGetter = $parse(match[2]);
-            
+
             return function ($scope, element, attrs, listView) {
                 var rawElement = element[0];
-                
+
                 listView.delegate = {
-                    
+
                     getItemIdentifier () {
                         return itemIdentifier;
                     },
-                    
+
                     throttle (fn) {
                         $scope.$$postDigest(fn);
                         safeDigest($scope);
                     }
-                    
+
                 };
-                
+
                 /**
                  * Update the viewport.
                  */
                 function updateListView () {
                     return listView.setViewport(rawElement.scrollTop, rawElement.clientHeight);
                 }
-                
+
                 $scope.$watch("options", (options) => {
                     listView.setOptions(options || {});
                 });
-                
+
                 var isScrolling; // For performance, don't retrieve items while the list is scrolling.
                 var endScrollDigestTimer;
                 $scope.$watchCollection(() => {
@@ -442,7 +445,7 @@ module.directive("uiListView", ($rootScope, $parse) => {
                     listView.reload(items);
                     updateListView();
                 });
-                
+
                 /**
                  * Update the list when its size changes.
                  */
@@ -451,7 +454,7 @@ module.directive("uiListView", ($rootScope, $parse) => {
                 }, () => {
                     updateListView();
                 });
-                
+
                 function handleScroll () {
                     if (updateListView()) {
                         isScrolling = true;
@@ -464,22 +467,22 @@ module.directive("uiListView", ($rootScope, $parse) => {
                         safeDigest($scope);
                     });
                 }
-                
+
                 rawElement.addEventListener("scroll", handleScroll, false);
-                
-                /** 
+
+                /**
                 * Digest the scope when the window resizes.
                 */
                 function handleResize () {
                     safeDigest($scope);
                 }
                 window.addEventListener("resize", handleResize);
-                
+
                 $scope.$on("$destroy", () => {
                     window.removeEventListener("resize", handleResize);
                 });
             };
         }
     };
-    
+
 });

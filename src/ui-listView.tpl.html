@@ -1,6 +1,12 @@
 <div class="ui-list-view">
-    <div class="ui-list-view-cell" ui-list-view-cell ng-repeat="cell in listView.cells">
-        <div class="ui-list-view-cell-content"></div>
+  <div class="ui-list-view-search">
+    <span class="ui-list-view-search-label">{{listView.placeholder}}</span>
+    <div class="ui-list-view-search-container">
+      <input type="text" placeholder="{{listView.placeholder}}" ng-model="listView.search">
     </div>
-    <div class="ui-list-view-anchor" ui-list-view-anchor></div>
+  </div>
+  <div class="ui-list-view-cell" ui-list-view-cell ng-repeat="cell in listView.cells">
+    <div class="ui-list-view-cell-content"></div>
+  </div>
+  <div class="ui-list-view-anchor" ui-list-view-anchor></div>
 </div>

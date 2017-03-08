@@ -41,6 +41,7 @@ var UIListView = (function () {
         _classCallCheck(this, UIListView);
 
         this.cells = [];
+        this.search = null;
         this.setOptions({});
     }
 
@@ -440,8 +441,10 @@ _module.directive("uiListView", ["$rootScope", "$parse", function ($rootScope, $
         templateUrl: "ui-listView.tpl.html",
         replace: true, // TODO: remove
         transclude: true,
-        scope: { options: "=" },
-
+        scope: {
+            options: "=",
+            search: "="
+        },
         controller: "UIListView",
         controllerAs: "listView",
 
@@ -514,7 +517,7 @@ _module.directive("uiListView", ["$rootScope", "$parse", function ($rootScope, $
 
                 rawElement.addEventListener("scroll", handleScroll, false);
 
-                /** 
+                /**
                 * Digest the scope when the window resizes.
                 */
                 function handleResize() {
@@ -532,7 +535,7 @@ _module.directive("uiListView", ["$rootScope", "$parse", function ($rootScope, $
 "use strict";
 
 angular.module("ui-listView.templates", []).run(["$templateCache", function ($templateCache) {
-  $templateCache.put("ui-listView.tpl.html", "<div class=\"ui-list-view\">\n    <div class=\"ui-list-view-cell\" ui-list-view-cell ng-repeat=\"cell in listView.cells\">\n        <div class=\"ui-list-view-cell-content\"></div>\n    </div>\n    <div class=\"ui-list-view-anchor\" ui-list-view-anchor></div>\n</div>");
+  $templateCache.put("ui-listView.tpl.html", "<div class=\"ui-list-view\">\n  <div class=\"ui-list-view-search\">\n    <span class=\"ui-list-view-search-label\">{{listView.placeholder}}</span>\n    <div class=\"ui-list-view-search-container\">\n      <input type=\"text\" placeholder=\"{{listView.placeholder}}\" ng-model=\"listView.search\">\n    </div>\n  </div>\n  <div class=\"ui-list-view-cell\" ui-list-view-cell ng-repeat=\"cell in listView.cells\">\n    <div class=\"ui-list-view-cell-content\"></div>\n  </div>\n  <div class=\"ui-list-view-anchor\" ui-list-view-anchor></div>\n</div>\n");
 }]);
 /**
  * @ngdoc directive

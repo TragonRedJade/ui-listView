@@ -13,3 +13,29 @@
 .ui-list-view .ui-list-view-cell.active {
   border-left-color: #E41F00;
 }
+
+.ui-list-view-cell-content img {
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  float: left;
+  margin-right: 10px;
+  margin-top: 3px;
+  vertical-align: middle;
+}
+
+.ui-list-view-cell-content span {
+  display: block;
+  float: left;
+  padding: 9px;
+}
+
+.ui-list-view-cell-content button {
+  float: right;
+}
+
+.ui-list-view-cell-content::after {
+  display: block;
+  content: "";
+  clear: both;
+}

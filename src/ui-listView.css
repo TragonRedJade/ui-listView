@@ -39,3 +39,43 @@
   content: "";
   clear: both;
 }
+
+.ui-list-view-search {
+  padding: 15px;
+  background: #fff;
+  position: relative;
+  height: 63px;
+  margin-bottom: 4px;
+}
+.ui-list-view-search .ui-list-view-search-label {
+  color: #818181;
+  display: inline-block;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 0 6px;
+  line-height: 33px;
+  vertical-align: middle;
+}
+.ui-list-view-search .ui-list-view-search-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.ui-list-view-search .ui-list-view-search-container::before {
+  content: "\50";
+  font-family: RedJadeIcons;
+  position: absolute;
+  left: 24px;
+  top: 17px;
+  font-size: 22px;
+}
+.ui-list-view-search .ui-list-view-search-container input {
+  border: 0;
+  padding: 0 26px 0 55px;
+  height: 63px;
+  width: 100%;
+  outline: none;
+}

@@ -65,7 +65,7 @@
   bottom: 0;
 }
 .ui-list-view-search .ui-list-view-search-container::before {
-  content: "\50";
+  content: "\e827";
   font-family: RedJadeIcons;
   position: absolute;
   left: 24px;

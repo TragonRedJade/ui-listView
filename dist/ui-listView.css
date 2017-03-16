@@ -68,9 +68,10 @@
   content: "\e827";
   font-family: RedJadeIcons;
   position: absolute;
-  left: 24px;
-  top: 17px;
+  left: 16px;
+  top: 16px;
   font-size: 22px;
+  color: #aaa;
 }
 .ui-list-view-search .ui-list-view-search-container input {
   border: 0;
